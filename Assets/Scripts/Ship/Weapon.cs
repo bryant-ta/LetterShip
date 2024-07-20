@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Weapon : Bit {
     public int Atk;
     public int AtkSpd;
@@ -9,4 +11,5 @@ public class Weapon : Bit {
     public override void Deactivate() {
         
     }
+    
 }

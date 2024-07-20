@@ -48,28 +48,39 @@ public class Bit : MonoBehaviour {
         Vector2 localP = transform.parent.TransformPoint(transform.localPosition);
         Vector2Int localPos = Vector2Int.RoundToInt(root.transform.parent.InverseTransformPoint(localP));
         Vector2Int rootPos = Vector2Int.RoundToInt(root.transform.localPosition);
-        if (root.Slots[rootSlotID] != null || rootSlot.offset + rootPos != localPos) {
+        if (rootSlotID == -1 || root.Slots[rootSlotID] != null || rootSlot.offset + rootPos != localPos) {
             return false;
         }
         
         // Type Check
-        // TODO: encode ID -> valid collider index => check rootSlot is valid collider
+        if (Type == BitType.Weapon || Type == BitType.Thruster) {
+            if (root.Type != BitType.Frame || !IsValidSlotAttach(root.Id, root.SlotID(rootSlot))) {
+                return false;
+            }
+        }
 
         // Do attach
         Root = root;
         for (int i = 0; i < Slots.Count; i++) {
             if (Slots[i] == null && SlotCols[i].offset + localPos == rootPos) {
                 Slots[i] = root;
+                SlotCols[i].enabled = false;
                 break;
             }
         }
         root.Slots[rootSlotID] = this;
+        root.SlotCols[rootSlotID].enabled = false;
+        
+        
 
+        // Change parent
         Transform oldParent = transform.parent;
         for (int i = 0; i < oldParent.childCount; i++) {
             oldParent.GetChild(i).parent = root.transform.parent;
         }
         Destroy(oldParent.gameObject);
+
+        gameObject.tag = "Player";
 
         return true;
     }
@@ -87,15 +98,19 @@ public class Bit : MonoBehaviour {
         foreach (var slot in Root.Slots) {
             if (slot.Value == this) {
                 Root.Slots[slot.Key] = null;
+                Root.SlotCols[slot.Key].enabled = true;
             }
         }
 
         foreach (var slot in Slots) {
             if (slot.Value == Root) {
                 Slots[slot.Key] = null;
+                SlotCols[slot.Key].enabled = true;
             }
         }
         Root = null;
+
+        gameObject.tag = "Untagged";
     }
 
     public List<Bit> Children() {
@@ -133,7 +148,7 @@ public class Bit : MonoBehaviour {
                 return slotID == 3; 
             case 6: // UD
                 return slotID == 0 || slotID == 2; 
-            case 7: // LR
+            case 7: // RL
                 return slotID == 3 || slotID == 1; 
             case 8: // _
                 return false; 

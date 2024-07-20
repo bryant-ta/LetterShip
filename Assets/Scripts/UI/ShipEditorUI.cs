@@ -13,10 +13,10 @@ public class ShipEditorUI : MonoBehaviour {
         // ship.transform.Rotate(new Vector3(0,0,45));
     }
 
-    public void SpawnFrame(int frameID) {
+    public void SpawnFrame(int id) {
         if (Ref.Player.IsHolding) return;
 
-        Frame frame = Factory.Instance.CreateFrame(frameID, Vector3.zero);
+        Frame frame = Factory.Instance.CreateFrame(id, Vector3.zero);
         GameObject salvageObj = Factory.Instance.CreateSalvage(Vector3.zero);
         frame.transform.parent = salvageObj.transform;
 
@@ -24,6 +24,38 @@ public class ShipEditorUI : MonoBehaviour {
             CursorPos = Input.mousePosition,
             TargetCol = frame.BodyCol,
             TargetObj = frame.gameObject
+        };
+
+        Ref.Player.GrabBit(clickInputArgs);
+    }
+    
+    public void SpawnWeapon(int id) {
+        if (Ref.Player.IsHolding) return;
+
+        Weapon weapon = Factory.Instance.CreateWeapon(id, Vector3.zero);
+        GameObject salvageObj = Factory.Instance.CreateSalvage(Vector3.zero);
+        weapon.transform.parent = salvageObj.transform;
+
+        ClickInputArgs clickInputArgs = new ClickInputArgs {
+            CursorPos = Input.mousePosition,
+            TargetCol = weapon.BodyCol,
+            TargetObj = weapon.gameObject
+        };
+
+        Ref.Player.GrabBit(clickInputArgs);
+    }
+    
+    public void SpawnThruster(int id) {
+        if (Ref.Player.IsHolding) return;
+
+        Thruster thruster = Factory.Instance.CreateThruster(id, Vector3.zero);
+        GameObject salvageObj = Factory.Instance.CreateSalvage(Vector3.zero);
+        thruster.transform.parent = salvageObj.transform;
+
+        ClickInputArgs clickInputArgs = new ClickInputArgs {
+            CursorPos = Input.mousePosition,
+            TargetCol = thruster.BodyCol,
+            TargetObj = thruster.gameObject
         };
 
         Ref.Player.GrabBit(clickInputArgs);

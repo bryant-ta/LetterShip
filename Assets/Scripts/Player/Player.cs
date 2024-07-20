@@ -37,7 +37,7 @@ public class Player : MonoBehaviour {
         if (heldBit == null) return;
         
         // Snap to ship slots
-        if (clickInputArgs.TargetObj != null) {
+        if (clickInputArgs.TargetObj != null && clickInputArgs.TargetCol.isTrigger) {
             if (clickInputArgs.TargetObj.TryGetComponent(out Bit b) && b.transform.parent.TryGetComponent(out Ship s)) {
                 heldBit.transform.parent.position = b.SlotPos(clickInputArgs.TargetCol);
                 heldBit.transform.parent.rotation = clickInputArgs.TargetObj.transform.rotation;
@@ -96,4 +96,22 @@ public class Player : MonoBehaviour {
         Input.InputKeyDown += Ship.ActivateLetter;
         Input.InputKeyUp += Ship.DeactivateLetter;
     }
+    
+    
+    
+    
+
+    // bool IsOverlappingShip() {
+    //     Collider2D[] overlappingCol = Physics2D.OverlapBoxAll(transform.position, new Vector2(0.1f, 0.1f), 0f);
+    //     foreach (Collider2D col in overlappingCol)
+    //     {
+    //         if (!col.isTrigger && col.CompareTag("Player"))
+    //         {
+    //             Debug.Log("Overlapping collider: " + col.name);
+    //             return false;
+    //         }
+    //     }
+    //
+    //     return true;
+    // }
 }
