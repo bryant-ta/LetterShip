@@ -2,18 +2,32 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BitType {
+    Bit = 0,
+    Frame = 1,
+    Weapon = 2,
+    Thruster = 3,
+}
+
 public class Bit : MonoBehaviour {
     // Properties
+    public int Id;
+    public BitType Type;
     public int Weight;
     public int Hp;
 
     // Connections
     public Bit Root;
-    public Dictionary<Collider2D, Bit> Slots = new();
+    public Dictionary<int, Bit> Slots = new();
+    
+    public Collider2D BodyCol;
+    public List<Collider2D> SlotCols = new(); // ULDR order
 
-    public void Init() {
-        Collider2D[] cols = GetComponents<Collider2D>();
-        foreach (Collider2D col in cols) {
+    public void Init(int id, BitType type) {
+        Id = id;
+        Type = type;
+        
+        foreach (Collider2D col in SlotCols) {
             Slots[col] = null;
         }
     }

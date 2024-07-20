@@ -56,14 +56,14 @@ public class PlayerInput : MonoBehaviour {
 
     public ClickInputArgs ClickInputArgsRaycast(Vector2 cursorPos) {
         ClickInputArgs clickInputArgs = new();
-        Vector3 worldPos = mainCam.ScreenToWorldPoint(new Vector3(cursorPos.x, cursorPos.y, mainCam.nearClipPlane));
+        Vector3 worldPos = mainCam.ScreenToWorldPoint(new Vector3(cursorPos.x, cursorPos.y, 0));
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero, Mathf.Infinity, PointLayer);
         if (hit.collider != null) {
             clickInputArgs.TargetCol = hit.collider;
             clickInputArgs.TargetObj = hit.collider.gameObject;
         }
         
-        clickInputArgs.CursorPos = cursorPos;
+        clickInputArgs.CursorPos = worldPos;
 
         return clickInputArgs;
     }

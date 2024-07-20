@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5de7e00109a0f04085f5774546d7e15, type: 3}
-  m_Name: TestShip
+  m_Name: StarterShip
   m_EditorClassIdentifier: 
-  Core: {fileID: 0}
+  Core: {fileID: 4103455123484568215, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}

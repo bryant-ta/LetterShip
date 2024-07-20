@@ -5,10 +5,10 @@ using UnityEngine;
 public class Ship : MonoBehaviour {
     public SO_Ship shipData;
     
-    Bit core;
+    public Bit Core { get; private set; }
 
     public void Awake() {
-        core = shipData.Core;
+        Core = shipData.Core;
     }
 
     public void ActivateLetter(char letter) {
@@ -26,11 +26,11 @@ public class Ship : MonoBehaviour {
     }
 
     List<Frame> FindFrameByLetter(char letter) {
-        if (core == null) return null;
+        if (Core == null) return null;
 
         List<Frame> matchedFrames = new();
         Queue<Bit> queue = new();
-        queue.Enqueue(core);
+        queue.Enqueue(Core);
 
         while (queue.Count > 0) {
             Bit curBit = queue.Dequeue();

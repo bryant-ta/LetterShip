@@ -2,25 +2,28 @@ using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    [SerializeField] SO_Ship starterShip;
+    [SerializeField] GameObject starterShip;
     
     PlayerInput input;
-    Ship ship;
+    public Ship Ship { get; private set; }
 
     Bit heldBit;
 
     void Awake() {
         input = GetComponent<PlayerInput>();
-        ship = Factory.Instance.CreateShip(starterShip, transform.position);
+        
+        Ship = Factory.Instance.CreateShip(starterShip, transform.position);
 
-        input.InputKeyDown += ship.ActivateLetter;
-        input.InputKeyUp += ship.DeactivateLetter;
+        input.InputKeyDown += Ship.ActivateLetter;
+        input.InputKeyUp += Ship.DeactivateLetter;
 
         input.InputPrimaryDown += GrabBit;
         input.InputPrimaryUp += ReleaseBit;
     }
 
     public void GrabBit(ClickInputArgs clickInputArgs) {
+        if (heldBit != null) return;
+        
         Bit b = clickInputArgs.TargetObj.GetComponent<Bit>();
         if (b == null) return;
 
@@ -34,6 +37,8 @@ public class Player : MonoBehaviour {
     }
 
     public void DragBit(ClickInputArgs clickInputArgs) {
+        if (heldBit == null) return;
+        
         // Snap to ship slots
         if (clickInputArgs.TargetObj != null) {
             if (clickInputArgs.TargetObj.TryGetComponent(out Bit b) && b.transform.parent.TryGetComponent(out Ship s)) {
@@ -46,10 +51,12 @@ public class Player : MonoBehaviour {
     }
 
     public void ReleaseBit(ClickInputArgs clickInputArgs) {
+        if (heldBit == null) return;
+        
         Bit b = clickInputArgs.TargetObj.GetComponent<Bit>();
         if (b == null) return;
         Ship s = b.transform.parent.GetComponent<Ship>();
-        if (s != ship) return;
+        if (s != Ship) return;
 
         Collider2D rootSlot = clickInputArgs.TargetCol;
         Bit root = b;
