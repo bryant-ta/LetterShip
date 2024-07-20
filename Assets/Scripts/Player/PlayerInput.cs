@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour {
     public LayerMask PointLayer;
 
+    public event Action InputCancel;
+
     public event Action<char> InputKeyDown;
     public event Action<char> InputKeyUp;
 
@@ -18,6 +20,10 @@ public class PlayerInput : MonoBehaviour {
     void Awake() { mainCam = Camera.main; }
 
     void Update() {
+        if (Input.GetButtonDown("Cancel")) {
+            InputCancel?.Invoke();
+        }
+        
         foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode))) {
             if (IsAlphabetKey(keyCode)) {
                 if (Input.GetKeyDown(keyCode)) {

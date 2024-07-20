@@ -5,17 +5,17 @@ using UnityEngine;
 public class Player : MonoBehaviour {
     [SerializeField] string startShipName;
     
-    PlayerInput input;
+    public PlayerInput Input { get; private set; }
     public Ship Ship { get; private set; }
 
     Bit heldBit;
     public bool IsHolding => heldBit != null;
 
     void Awake() {
-        input = GetComponent<PlayerInput>();
+        Input = GetComponent<PlayerInput>();
 
-        input.InputPrimaryDown += GrabBit;
-        input.InputPrimaryUp += ReleaseBit;
+        Input.InputPrimaryDown += GrabBit;
+        Input.InputPrimaryUp += ReleaseBit;
     }
 
     public void GrabBit(ClickInputArgs clickInputArgs) {
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
             col.enabled = false;
         }
 
-        input.InputPoint += DragBit;
+        Input.InputPoint += DragBit;
     }
 
     public void DragBit(ClickInputArgs clickInputArgs) {
@@ -70,20 +70,30 @@ public class Player : MonoBehaviour {
 
         heldBit = null;
 
-        input.InputPoint -= DragBit;
+        Input.InputPoint -= DragBit;
+    }
+
+    // prob only call from ShipEditor
+    public void TrashBit() {
+        if (heldBit == null) return;
+        
+        Destroy(heldBit.gameObject);
+        heldBit = null;
+        
+        Input.InputPoint -= DragBit;
     }
 
     public void SetShip(Ship ship) {
         if (Ship != null) {
-            input.InputKeyDown -= Ship.ActivateLetter;
-            input.InputKeyUp -= Ship.DeactivateLetter;
+            Input.InputKeyDown -= Ship.ActivateLetter;
+            Input.InputKeyUp -= Ship.DeactivateLetter;
             Ship.DeactivateAll();
             Destroy(Ship.gameObject);
         }
         
         Ship = ship;
 
-        input.InputKeyDown += Ship.ActivateLetter;
-        input.InputKeyUp += Ship.DeactivateLetter;
+        Input.InputKeyDown += Ship.ActivateLetter;
+        Input.InputKeyUp += Ship.DeactivateLetter;
     }
 }

@@ -51,6 +51,9 @@ public class Bit : MonoBehaviour {
         if (root.Slots[rootSlotID] != null || rootSlot.offset + rootPos != localPos) {
             return false;
         }
+        
+        // Type Check
+        // TODO: encode ID -> valid collider index => check rootSlot is valid collider
 
         // Do attach
         Root = root;
@@ -112,5 +115,30 @@ public class Bit : MonoBehaviour {
 
     public int SlotID(Collider2D col) {
         return SlotCols.IndexOf(col);
+    }
+
+    // encode Frame ID -> slotID is valid for Weapons, Thrusters
+    public static bool IsValidSlotAttach(int frameID, int slotID) {
+        switch (frameID) {
+            case 0: // Core
+            case 1: // URDL
+                return true;
+            case 2: // U
+                return slotID == 0; 
+            case 3: // R
+                return slotID == 1; 
+            case 4: // D
+                return slotID == 2; 
+            case 5: // L
+                return slotID == 3; 
+            case 6: // UD
+                return slotID == 0 || slotID == 2; 
+            case 7: // LR
+                return slotID == 3 || slotID == 1; 
+            case 8: // _
+                return false; 
+        }
+        Debug.LogError("Unhandled frameID.");
+        return false;
     }
 }
