@@ -18,7 +18,7 @@ public class Bit : MonoBehaviour {
 
     // Connections
     public Bit Root;
-    public Dictionary<int, Bit> Slots = new();
+    public Dictionary<int, Bit> Slots = new(); // int = index of matching collider in SlotCols
     
     public Collider2D BodyCol;
     public List<Collider2D> SlotCols = new(); // ULDR order
@@ -27,8 +27,8 @@ public class Bit : MonoBehaviour {
         Id = id;
         Type = type;
         
-        foreach (Collider2D col in SlotCols) {
-            Slots[col] = null;
+        for (int i = 0; i < SlotCols.Count; i++) {
+            Slots[i] = null;
         }
     }
 
@@ -43,24 +43,23 @@ public class Bit : MonoBehaviour {
             return false;
         }
 
+        int rootSlotID = root.SlotID(rootSlot);
+
         Vector2Int localPos = Vector2Int.RoundToInt(transform.localPosition);
         Vector2Int rootPos = Vector2Int.RoundToInt(root.transform.localPosition);
-        if (root.Slots[rootSlot] != null || rootSlot.offset + rootPos != localPos) {
+        if (root.Slots[rootSlotID] != null || rootSlot.offset + rootPos != localPos) {
             return false;
         }
 
-        Collider2D attachSlot = null;
-        foreach (KeyValuePair<Collider2D, Bit> slot in Slots) {
-            if (slot.Value != null && slot.Key.offset + localPos == rootPos) {
-                attachSlot = slot.Key;
-            }
-        }
-        if (attachSlot == null) return false;
-
         // Do attach
         Root = root;
-        Slots[attachSlot] = root;
-        root.Slots[rootSlot] = this;
+        for (int i = 0; i < Slots.Count; i++) {
+            if (Slots[i] != null && SlotCols[i].offset + localPos == rootPos) {
+                Slots[i] = root;
+                break;
+            }
+        }
+        root.Slots[rootSlotID] = this;
 
         Transform oldParent = transform.parent;
         for (int i = 0; i < oldParent.childCount; i++) {
@@ -81,13 +80,13 @@ public class Bit : MonoBehaviour {
             bit.transform.parent = newParent;
         }
 
-        foreach (KeyValuePair<Collider2D, Bit> slot in Root.Slots) {
+        foreach (var slot in Root.Slots) {
             if (slot.Value == this) {
                 Root.Slots[slot.Key] = null;
             }
         }
 
-        foreach (KeyValuePair<Collider2D, Bit> slot in Slots) {
+        foreach (var slot in Slots) {
             if (slot.Value == Root) {
                 Slots[slot.Key] = null;
             }
@@ -97,7 +96,7 @@ public class Bit : MonoBehaviour {
 
     public List<Bit> Children() {
         List<Bit> children = new();
-        foreach (KeyValuePair<Collider2D, Bit> slot in Slots) {
+        foreach (var slot in Slots) {
             if (slot.Value != Root && slot.Value != null) {
                 children.Add(slot.Value);
             }
@@ -107,4 +106,8 @@ public class Bit : MonoBehaviour {
     }
 
     public Vector3 SlotPos(Collider2D col) { return (Vector3) col.offset + transform.localPosition; }
+
+    public int SlotID(Collider2D col) {
+        return SlotCols.IndexOf(col);
+    }
 }

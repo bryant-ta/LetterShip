@@ -5,6 +5,8 @@ public class Factory : Singleton<Factory> {
     [SerializeField] GameObject salvageBase;
     [SerializeField] GameObject shipBase;
 
+    [SerializeField] GameObject simpleShip;
+
     [SerializeField] List<GameObject> frames;
     [SerializeField] List<GameObject> weapons;
     [SerializeField] List<GameObject> thrusters;
@@ -16,21 +18,20 @@ public class Factory : Singleton<Factory> {
         return salvageObj;
     }
 
-    public Ship CreateShip(SO_Ship shipData, Vector3 pos) {
-        // Instantiate according to shipData
-        
-        
-        return null;
+    public Ship CreateBaseShip(Vector3 pos) {
+        Ship ship = Instantiate(simpleShip, pos, Quaternion.identity).GetComponent<Ship>();
+        ship.Core = ship.GetComponentInChildren<Bit>();
+        ship.Core.Init(ship.Core.Id, ship.Core.Type);
+        return ship;
     }
-    
+
     public Ship CreateShip(string shipName, Vector3 pos) {
         Ship ship = Instantiate(shipBase, pos, Quaternion.identity).GetComponent<Ship>();
         
         BitData bitData = shipSerializer.LoadBit(shipName);
         if (bitData == null) return null;
         
-        // TODO: generate this
-        CreateBitFromBitData(bitData, null, ship.transform);
+        ship.Core = CreateBitFromBitData(bitData, null, ship.transform);
         
         return ship;
     }
@@ -72,7 +73,7 @@ public class Factory : Singleton<Factory> {
         frame.Init(id, BitType.Frame);
         return frame;
     }
-    
+
     public Weapon CreateWeapon(int id, Vector3 pos) {
         Weapon weapon = Instantiate(weapons[id], pos, Quaternion.identity).GetComponent<Weapon>();
         weapon.Init(id, BitType.Weapon);

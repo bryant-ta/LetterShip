@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   salvageBase: {fileID: 4764423743414668555, guid: fa6c8e0414da23d4c86fbb6cf9a4cacf, type: 3}
   shipBase: {fileID: 467087351706731815, guid: 3bfc39a897ea4f140a97ed87e94d9a3d, type: 3}
+  simpleShip: {fileID: 467087351706731815, guid: 3bfc39a897ea4f140a97ed87e94d9a3d, type: 3}
   frames:
   - {fileID: 4103455123484568237, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
   weapons: []
@@ -526,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54db916825cd19844a4c941786793342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starterShip: {fileID: 467087351706731815, guid: 3bfc39a897ea4f140a97ed87e94d9a3d, type: 3}
+  startShipName: 
 --- !u!114 &296430086
 MonoBehaviour:
   m_ObjectHideFlags: 0

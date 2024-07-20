@@ -1,10 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
-
-[CreateAssetMenu(menuName = "Ship")]
-public class SO_Ship : ScriptableObject {
-    public BitData Core;
-}
 
 public class BitData {
     public int Id;

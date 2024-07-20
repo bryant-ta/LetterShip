@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ship : MonoBehaviour {
-    public SO_Ship shipData;
-    
-    public Bit Core { get; private set; }
-
-    public void Awake() {
-        Core = shipData.Core;
-    }
+    public Bit Core;
 
     public void ActivateLetter(char letter) {
         List<Frame> matchedBits = FindFrameByLetter(letter);

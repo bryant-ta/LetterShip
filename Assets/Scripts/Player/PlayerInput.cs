@@ -30,6 +30,12 @@ public class PlayerInput : MonoBehaviour {
 
         // Purely for dragging bits and rotating, etc.
         ClickInputArgs clickInputArgs = ClickInputArgsRaycast(Input.mousePosition);
+        InputPoint?.Invoke(clickInputArgs);
+
+        if (clickInputArgs.TargetObj == null) {
+            return;
+        }
+        
         if (Input.GetButtonDown("Fire1")) {
             InputPrimaryDown?.Invoke(clickInputArgs);
         } else if (Input.GetButtonUp("Fire1")) {
@@ -42,7 +48,6 @@ public class PlayerInput : MonoBehaviour {
             InputSecondaryUp?.Invoke(clickInputArgs);
         }
 
-        InputPoint?.Invoke(clickInputArgs);
     }
 
     bool IsAlphabetKey(KeyCode keyCode) { return keyCode >= KeyCode.A && keyCode <= KeyCode.Z; }

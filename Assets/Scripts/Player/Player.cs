@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    [SerializeField] GameObject starterShip;
+    [SerializeField] string startShipName;
     
     PlayerInput input;
     public Ship Ship { get; private set; }
@@ -11,11 +11,6 @@ public class Player : MonoBehaviour {
 
     void Awake() {
         input = GetComponent<PlayerInput>();
-        
-        Ship = Factory.Instance.CreateShip(starterShip, transform.position);
-
-        input.InputKeyDown += Ship.ActivateLetter;
-        input.InputKeyUp += Ship.DeactivateLetter;
 
         input.InputPrimaryDown += GrabBit;
         input.InputPrimaryUp += ReleaseBit;
@@ -73,5 +68,12 @@ public class Player : MonoBehaviour {
         heldBit = null;
 
         input.InputPoint -= DragBit;
+    }
+
+    public void SetShip(Ship ship) {
+        Ship = ship;
+
+        input.InputKeyDown += Ship.ActivateLetter;
+        input.InputKeyUp += Ship.DeactivateLetter;
     }
 }
