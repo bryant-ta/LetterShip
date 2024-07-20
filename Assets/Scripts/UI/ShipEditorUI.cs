@@ -1,14 +1,20 @@
-using System;
+using TMPro;
 using UnityEngine;
 
 public class ShipEditorUI : MonoBehaviour {
+    [SerializeField] TMP_InputField shipNameField;
+
     void Awake() {
         Ship ship = Factory.Instance.CreateBaseShip(Vector3.zero);
         Ref.Player.SetShip(ship);
+
+        // ship.transform.Rotate(new Vector3(0,0,45));
     }
 
     public void SpawnFrame(int frameID) {
-        Frame frame = Factory.Instance.CreateFrame(0, Vector3.zero);
+        if (Ref.Player.IsHolding) return;
+
+        Frame frame = Factory.Instance.CreateFrame(frameID, Vector3.zero);
         GameObject salvageObj = Factory.Instance.CreateSalvage(Vector3.zero);
         frame.transform.parent = salvageObj.transform;
 
@@ -20,4 +26,10 @@ public class ShipEditorUI : MonoBehaviour {
 
         Ref.Player.GrabBit(clickInputArgs);
     }
+
+    public void SaveShip() { Factory.Instance.SaveShip(shipNameField.text); }
+
+    public void LoadShip() { Factory.Instance.LoadShip(shipNameField.text); }
+
+    public void ResetShip() { Ref.Player.Ship.transform.position = Vector3.zero; }
 }

@@ -41,4 +41,30 @@ public class Ship : MonoBehaviour {
 
         return matchedFrames;
     }
+
+    public void DeactivateAll() {
+        List<Bit> allShipBits = AllBits();
+        foreach (Bit bit in allShipBits) {
+            bit.Deactivate();
+        }
+    }
+    
+    List<Bit> AllBits() {
+        List<Bit> allBits = new();
+        if (Core == null) return allBits;
+
+        Queue<Bit> queue = new();
+        queue.Enqueue(Core);
+
+        while (queue.Count > 0) {
+            Bit curBit = queue.Dequeue();
+            allBits.Add(curBit);
+
+            foreach (Bit child in curBit.Children()) {
+                queue.Enqueue(child);
+            }
+        }
+
+        return allBits;
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
@@ -8,6 +9,7 @@ public class Player : MonoBehaviour {
     public Ship Ship { get; private set; }
 
     Bit heldBit;
+    public bool IsHolding => heldBit != null;
 
     void Awake() {
         input = GetComponent<PlayerInput>();
@@ -37,12 +39,13 @@ public class Player : MonoBehaviour {
         // Snap to ship slots
         if (clickInputArgs.TargetObj != null) {
             if (clickInputArgs.TargetObj.TryGetComponent(out Bit b) && b.transform.parent.TryGetComponent(out Ship s)) {
-                heldBit.transform.position = b.SlotPos(clickInputArgs.TargetCol);
+                heldBit.transform.parent.position = b.SlotPos(clickInputArgs.TargetCol);
+                heldBit.transform.parent.rotation = clickInputArgs.TargetObj.transform.rotation;
                 return;
             }
         }
         
-        heldBit.transform.position = clickInputArgs.CursorPos;
+        heldBit.transform.parent.position = clickInputArgs.CursorPos;
     }
 
     public void ReleaseBit(ClickInputArgs clickInputArgs) {
@@ -71,6 +74,13 @@ public class Player : MonoBehaviour {
     }
 
     public void SetShip(Ship ship) {
+        if (Ship != null) {
+            input.InputKeyDown -= Ship.ActivateLetter;
+            input.InputKeyUp -= Ship.DeactivateLetter;
+            Ship.DeactivateAll();
+            Destroy(Ship.gameObject);
+        }
+        
         Ship = ship;
 
         input.InputKeyDown += Ship.ActivateLetter;

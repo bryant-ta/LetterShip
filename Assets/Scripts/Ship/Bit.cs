@@ -45,7 +45,8 @@ public class Bit : MonoBehaviour {
 
         int rootSlotID = root.SlotID(rootSlot);
 
-        Vector2Int localPos = Vector2Int.RoundToInt(transform.localPosition);
+        Vector2 localP = transform.parent.TransformPoint(transform.localPosition);
+        Vector2Int localPos = Vector2Int.RoundToInt(root.transform.parent.InverseTransformPoint(localP));
         Vector2Int rootPos = Vector2Int.RoundToInt(root.transform.localPosition);
         if (root.Slots[rootSlotID] != null || rootSlot.offset + rootPos != localPos) {
             return false;
@@ -54,7 +55,7 @@ public class Bit : MonoBehaviour {
         // Do attach
         Root = root;
         for (int i = 0; i < Slots.Count; i++) {
-            if (Slots[i] != null && SlotCols[i].offset + localPos == rootPos) {
+            if (Slots[i] == null && SlotCols[i].offset + localPos == rootPos) {
                 Slots[i] = root;
                 break;
             }
@@ -105,7 +106,9 @@ public class Bit : MonoBehaviour {
         return children;
     }
 
-    public Vector3 SlotPos(Collider2D col) { return (Vector3) col.offset + transform.localPosition; }
+    public Vector3 SlotPos(Collider2D col) {
+        return transform.parent.TransformPoint((Vector3)col.offset + transform.localPosition);
+    }
 
     public int SlotID(Collider2D col) {
         return SlotCols.IndexOf(col);

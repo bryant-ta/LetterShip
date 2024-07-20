@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class Factory : Singleton<Factory> {
 
     ShipSerializer shipSerializer;
 
+    void Awake() { shipSerializer = new ShipSerializer(); }
+
     public GameObject CreateSalvage(Vector3 pos) {
         GameObject salvageObj = Instantiate(salvageBase, pos, Quaternion.identity);
         return salvageObj;
@@ -27,12 +30,12 @@ public class Factory : Singleton<Factory> {
 
     public Ship CreateShip(string shipName, Vector3 pos) {
         Ship ship = Instantiate(shipBase, pos, Quaternion.identity).GetComponent<Ship>();
-        
+
         BitData bitData = shipSerializer.LoadBit(shipName);
         if (bitData == null) return null;
-        
+
         ship.Core = CreateBitFromBitData(bitData, null, ship.transform);
-        
+
         return ship;
     }
 
@@ -42,11 +45,16 @@ public class Factory : Singleton<Factory> {
         Bit bit = CreateBit(bitData.Id, bitData.Type, shipTrs.position);
         bit.Root = lastBit;
         bit.transform.SetParent(shipTrs);
+        bit.transform.localPosition = new Vector3(bitData.Position.x, bitData.Position.y, bitData.Position.z);
 
         for (int i = 0; i < bitData.Children.Count; i++) {
             if (bitData.Children[i] != null) {
-                Bit childBit = CreateBitFromBitData(bitData.Children[i], bit, shipTrs);
-                bit.Slots[bitData.slotIds[i]] = childBit;
+                if (bitData.Children[i].RootPlaceholder) {
+                    bit.Slots[bitData.SlotIds[i]] = bit.Root;
+                } else {
+                    Bit childBit = CreateBitFromBitData(bitData.Children[i], bit, shipTrs);
+                    bit.Slots[bitData.SlotIds[i]] = childBit;
+                }
             }
             // null Slot already set in Bit.Init
         }
@@ -85,4 +93,16 @@ public class Factory : Singleton<Factory> {
         thruster.Init(id, BitType.Thruster);
         return thruster;
     }
+
+    #region ShipSerializer
+
+    public void SaveShip(string input) { shipSerializer.SaveShip(input); }
+
+    // Used by ShipEditor Load Button
+    public void LoadShip(string input) {
+        Ship ship = CreateShip(input, Vector3.zero);
+        Ref.Player.SetShip(ship);
+    }
+
+    #endregion
 }
