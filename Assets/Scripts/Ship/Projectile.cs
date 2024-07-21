@@ -21,8 +21,11 @@ public class Projectile : MonoBehaviour {
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
 
-    void OnCollisionEnter2D(Collision2D col) {
-        // Handle collision (e.g., damage enemy)
-        Destroy(gameObject);
+    void OnTriggerEnter2D(Collider2D col) {
+        if (col.CompareTag("Player")) return;
+        if (col.TryGetComponent(out Bit b) && b.BodyCol == col) {
+            b.DoDamage(Dmg);
+            Destroy(gameObject);
+        }
     }
 }

@@ -60,7 +60,7 @@ public class Ship : MonoBehaviour {
         rb.mass = (float)allShipBits.Count/3f;
     }
     
-    List<Bit> AllBits() {
+    public List<Bit> AllBits() {
         List<Bit> allBits = new();
         if (Core == null) return allBits;
 

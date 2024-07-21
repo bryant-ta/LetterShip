@@ -343,7 +343,7 @@ MonoBehaviour:
   Id: 1
   Type: 1
   Weight: 1
-  Hp: 1
+  Hp: 3
   Root: {fileID: 0}
   BodyCol: {fileID: 4103455123484568214}
   SlotCols:

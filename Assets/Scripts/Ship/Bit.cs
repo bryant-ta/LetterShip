@@ -15,6 +15,7 @@ public class Bit : MonoBehaviour {
     public BitType Type;
     public int Weight;
     public int Hp;
+    int MaxHp;
 
     // Connections
     public Bit Root;
@@ -22,6 +23,13 @@ public class Bit : MonoBehaviour {
 
     public Collider2D BodyCol;
     public List<Collider2D> SlotCols = new(); // ULDR order
+
+    SpriteRenderer sr;
+
+    void Awake() {
+        sr = GetComponent<SpriteRenderer>();
+        MaxHp = Hp;
+    }
 
     public void Init(int id, BitType type) {
         Id = id;
@@ -83,14 +91,13 @@ public class Bit : MonoBehaviour {
         // Change parent
         Transform oldParent = transform.parent;
         for (int i = oldParent.childCount - 1; i >= 0; i--) {
+            oldParent.GetChild(i).tag = "Player";
             oldParent.GetChild(i).parent = root.transform.parent;
         }
         Destroy(oldParent.gameObject);
         
         // Update ship stats
         transform.parent.GetComponent<Ship>().UpdateMass();
-
-        gameObject.tag = "Player";
 
         return true;
     }
@@ -103,6 +110,7 @@ public class Bit : MonoBehaviour {
         Transform newParent = Factory.Instance.CreateSalvage(transform.position).transform;
         transform.parent = newParent;
         foreach (Bit bit in Children()) {
+            bit.tag = "Untagged";
             bit.transform.parent = newParent;
         }
 
@@ -124,9 +132,31 @@ public class Bit : MonoBehaviour {
         if (oldParent.TryGetComponent(out Ship s)) {
             s.UpdateMass();
         }
-
-        gameObject.tag = "Untagged";
     }
+
+    #region Damage
+
+    public void DoDamage(int dmg) {
+        Hp -= dmg;
+        if (Hp <= 0) {
+            // TODO: handle destroy and dettach
+            Dettach();
+            foreach (Bit bit in DirectChildren()) {
+                bit.Dettach();
+            }
+            
+            Deactivate();
+            Destroy(transform.parent.gameObject);
+        }
+
+        Color c = sr.color;
+        c.a = (float) Hp / MaxHp;
+        sr.color = c;
+    }
+
+    #endregion
+
+    #region Helper
 
     public List<Bit> Children() {
         List<Bit> children = new();
@@ -137,6 +167,17 @@ public class Bit : MonoBehaviour {
                 foreach (var bit in c) {
                     children.Add(bit);
                 }
+            }
+        }
+
+        return children;
+    }
+
+    public List<Bit> DirectChildren() {
+        List<Bit> children = new();
+        foreach (var slot in Slots) {
+            if (slot.Value != Root && slot.Value != null) {
+                children.Add(slot.Value);
             }
         }
 
@@ -200,4 +241,6 @@ public class Bit : MonoBehaviour {
 
         return allBits;
     }
+    
+    #endregion
 }

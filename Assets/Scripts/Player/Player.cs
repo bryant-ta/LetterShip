@@ -8,6 +8,9 @@ public class Player : MonoBehaviour {
 
     public PlayerInput PlayerInput { get; private set; }
     public Ship Ship { get; private set; }
+    
+    BitConnectionRenderer bitConnRenderer;
+    bool showBitConns;
 
     Bit heldBit;
     List<Bit> heldBits = new();
@@ -15,9 +18,15 @@ public class Player : MonoBehaviour {
 
     void Awake() {
         PlayerInput = GetComponent<PlayerInput>();
+        bitConnRenderer = GetComponent<BitConnectionRenderer>();
 
         PlayerInput.InputPrimaryDown += GrabBit;
         PlayerInput.InputPrimaryUp += ReleaseBit;
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.LeftShift)) bitConnRenderer.Render(Ship.Core);
+        if (Input.GetKeyUp(KeyCode.LeftShift)) bitConnRenderer.Clear();
     }
 
     public void GrabBit(ClickInputArgs clickInputArgs) {
@@ -111,11 +120,16 @@ public class Player : MonoBehaviour {
 
         Ship = ship;
         Ship.UpdateMass();
+        List<Bit> allShipBits = Ship.AllBits();
+        foreach (Bit bit in allShipBits) {
+            bit.tag = "Player";
+        }
+        
+        GetComponent<FollowTarget>().SetTarget(Ship.gameObject);
 
         PlayerInput.InputKeyDown += Ship.ActivateLetter;
         PlayerInput.InputKeyUp += Ship.DeactivateLetter;
     }
-
 
     public bool CheckUIIgnoreTag() {
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
