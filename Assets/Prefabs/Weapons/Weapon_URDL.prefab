@@ -115,6 +115,7 @@ MonoBehaviour:
   - {fileID: 4103455123484568234}
   Atk: 1
   AtkSpd: 1
+  projectileObj: {fileID: 7150643445396966638, guid: ea1386ad57b255740a521e26c03097dc, type: 3}
 --- !u!61 &4103455123484568214
 BoxCollider2D:
   m_ObjectHideFlags: 0

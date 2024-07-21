@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Factory : Singleton<Factory> {
     [SerializeField] GameObject salvageBase;
@@ -35,6 +36,7 @@ public class Factory : Singleton<Factory> {
         if (bitData == null) return null;
 
         ship.Core = CreateBitFromBitData(bitData, null, ship.transform);
+        
 
         return ship;
     }
@@ -50,10 +52,12 @@ public class Factory : Singleton<Factory> {
         for (int i = 0; i < bitData.Children.Count; i++) {
             if (bitData.Children[i] != null) {
                 if (bitData.Children[i].RootPlaceholder) {
-                    bit.Slots[bitData.SlotIds[i]] = bit.Root;
+                    bit.Slots[i] = bit.Root;
+                    bit.SlotCols[i].enabled = false;
                 } else {
                     Bit childBit = CreateBitFromBitData(bitData.Children[i], bit, shipTrs);
-                    bit.Slots[bitData.SlotIds[i]] = childBit;
+                    bit.Slots[i] = childBit;
+                    bit.SlotCols[i].enabled = false;
                 }
             }
             // null Slot already set in Bit.Init
@@ -78,7 +82,14 @@ public class Factory : Singleton<Factory> {
 
     public Frame CreateFrame(int id, Vector3 pos) {
         Frame frame = Instantiate(frames[id], pos, Quaternion.identity).GetComponent<Frame>();
-        frame.Init(id, BitType.Frame);
+
+        char c = '_';
+        if (id != 8) { // frame_ (no attachments)
+            int randomIndex = Random.Range(0, 26);
+            c = (char) ('A' + randomIndex);
+        }
+        
+        frame.Init(id, BitType.Frame, c);
         return frame;
     }
 

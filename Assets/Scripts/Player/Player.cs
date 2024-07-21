@@ -1,41 +1,47 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour {
     [SerializeField] string startShipName;
-    
-    public PlayerInput Input { get; private set; }
+
+    public PlayerInput PlayerInput { get; private set; }
     public Ship Ship { get; private set; }
 
     Bit heldBit;
+    List<Bit> heldBits = new();
     public bool IsHolding => heldBit != null;
 
     void Awake() {
-        Input = GetComponent<PlayerInput>();
+        PlayerInput = GetComponent<PlayerInput>();
 
-        Input.InputPrimaryDown += GrabBit;
-        Input.InputPrimaryUp += ReleaseBit;
+        PlayerInput.InputPrimaryDown += GrabBit;
+        PlayerInput.InputPrimaryUp += ReleaseBit;
     }
 
     public void GrabBit(ClickInputArgs clickInputArgs) {
         if (heldBit != null) return;
-        
+        if (clickInputArgs.TargetObj == null) return;
+
         Bit b = clickInputArgs.TargetObj.GetComponent<Bit>();
         if (b == null) return;
 
         heldBit = b;
-        Collider2D[] cols = heldBit.GetComponents<Collider2D>();
-        foreach (Collider2D col in cols) {
-            col.enabled = false;
+
+        heldBit.Dettach();
+
+        heldBits = heldBit.AllConnectedBits();
+        foreach (var bit in heldBits) {
+            bit.BodyCol.enabled = false;
         }
 
-        Input.InputPoint += DragBit;
+        PlayerInput.InputPoint += DragBit;
     }
 
     public void DragBit(ClickInputArgs clickInputArgs) {
         if (heldBit == null) return;
-        
+
         // Snap to ship slots
         if (clickInputArgs.TargetObj != null && clickInputArgs.TargetCol.isTrigger) {
             if (clickInputArgs.TargetObj.TryGetComponent(out Bit b) && b.transform.parent.TryGetComponent(out Ship s)) {
@@ -44,62 +50,90 @@ public class Player : MonoBehaviour {
                 return;
             }
         }
-        
+
         heldBit.transform.parent.position = clickInputArgs.CursorPos;
     }
 
     public void ReleaseBit(ClickInputArgs clickInputArgs) {
         if (heldBit == null) return;
-        
-        Bit b = clickInputArgs.TargetObj.GetComponent<Bit>();
-        if (b == null) return;
-        Ship s = b.transform.parent.GetComponent<Ship>();
-        if (s != Ship) return;
 
-        Collider2D rootSlot = clickInputArgs.TargetCol;
-        Bit root = b;
-
-        if (!heldBit.Attach(root, rootSlot)) {
+        if (EventSystem.current.IsPointerOverGameObject() && CheckUIIgnoreTag()) {
             return;
         }
 
-        Collider2D[] cols = heldBit.GetComponents<Collider2D>();
-        foreach (Collider2D col in cols) {
-            col.enabled = true;
+        // Drop bit in space
+        if (clickInputArgs.TargetObj == null) {
+            foreach (var bit in heldBits) {
+                bit.BodyCol.enabled = true;
+            }
+
+            ReleaseTasks();
+            return;
         }
 
-        heldBit = null;
+        if (!clickInputArgs.TargetObj.TryGetComponent(out Bit targetBit)) return;
+        if (!targetBit.transform.parent.TryGetComponent(out Ship targetShip)) return;
+        if (targetShip != Ship) return;
 
-        Input.InputPoint -= DragBit;
+        Collider2D rootSlot = clickInputArgs.TargetCol;
+
+        if (!heldBit.Attach(targetBit, rootSlot)) return;
+
+        foreach (var bit in heldBits) {
+            bit.BodyCol.enabled = true;
+        }
+
+        ReleaseTasks();
+    }
+    void ReleaseTasks() {
+        heldBit = null;
+        heldBits.Clear();
+
+        PlayerInput.InputPoint -= DragBit;
     }
 
     // prob only call from ShipEditor
     public void TrashBit() {
         if (heldBit == null) return;
-        
+
         Destroy(heldBit.gameObject);
-        heldBit = null;
-        
-        Input.InputPoint -= DragBit;
+
+        ReleaseTasks();
     }
 
     public void SetShip(Ship ship) {
         if (Ship != null) {
-            Input.InputKeyDown -= Ship.ActivateLetter;
-            Input.InputKeyUp -= Ship.DeactivateLetter;
+            PlayerInput.InputKeyDown -= Ship.ActivateLetter;
+            PlayerInput.InputKeyUp -= Ship.DeactivateLetter;
             Ship.DeactivateAll();
             Destroy(Ship.gameObject);
         }
-        
-        Ship = ship;
 
-        Input.InputKeyDown += Ship.ActivateLetter;
-        Input.InputKeyUp += Ship.DeactivateLetter;
+        Ship = ship;
+        Ship.UpdateMass();
+
+        PlayerInput.InputKeyDown += Ship.ActivateLetter;
+        PlayerInput.InputKeyUp += Ship.DeactivateLetter;
     }
-    
-    
-    
-    
+
+
+    public bool CheckUIIgnoreTag() {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, raycastResults);
+
+        foreach (RaycastResult result in raycastResults) {
+            GameObject uiElement = result.gameObject;
+            if (uiElement.CompareTag("UIIgnore")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // bool IsOverlappingShip() {
     //     Collider2D[] overlappingCol = Physics2D.OverlapBoxAll(transform.position, new Vector2(0.1f, 0.1f), 0f);

@@ -38,10 +38,6 @@ public class PlayerInput : MonoBehaviour {
         ClickInputArgs clickInputArgs = ClickInputArgsRaycast(Input.mousePosition);
         InputPoint?.Invoke(clickInputArgs);
 
-        if (clickInputArgs.TargetObj == null) {
-            return;
-        }
-        
         if (Input.GetButtonDown("Fire1")) {
             InputPrimaryDown?.Invoke(clickInputArgs);
         } else if (Input.GetButtonUp("Fire1")) {

@@ -5,6 +5,12 @@ using UnityEngine;
 public class Ship : MonoBehaviour {
     public Bit Core;
 
+    Rigidbody2D rb;
+
+    void Awake() {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     public void ActivateLetter(char letter) {
         List<Frame> matchedBits = FindFrameByLetter(letter);
         foreach (Frame frame in matchedBits) {
@@ -30,7 +36,7 @@ public class Ship : MonoBehaviour {
             Bit curBit = queue.Dequeue();
 
             Frame frame = curBit as Frame;
-            if (frame != null && frame.Letter == letter) {
+            if (frame != null && char.ToLower(frame.Letter) == char.ToLower(letter)) {
                 matchedFrames.Add(frame);
             }
 
@@ -47,6 +53,11 @@ public class Ship : MonoBehaviour {
         foreach (Bit bit in allShipBits) {
             bit.Deactivate();
         }
+    }
+
+    public void UpdateMass() {
+        List<Bit> allShipBits = AllBits();
+        rb.mass = (float)allShipBits.Count/3f;
     }
     
     List<Bit> AllBits() {

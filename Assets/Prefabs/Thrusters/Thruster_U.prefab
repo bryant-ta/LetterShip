@@ -113,7 +113,7 @@ MonoBehaviour:
   - {fileID: 4103455123484568232}
   - {fileID: 4103455123484568235}
   - {fileID: 4103455123484568234}
-  Pow: 1
+  Pow: 25
 --- !u!61 &4103455123484568214
 BoxCollider2D:
   m_ObjectHideFlags: 0

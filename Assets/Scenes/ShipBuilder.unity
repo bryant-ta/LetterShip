@@ -741,17 +741,17 @@ MonoBehaviour:
   - {fileID: 7309705605758184450, guid: 3645cf13e430291478e9f851fcf9e0eb, type: 3}
   weapons:
   - {fileID: 4103455123484568237, guid: 60d24f53521bcc14883af1ea0f8f2b8b, type: 3}
-  - {fileID: 4103455123484568237, guid: 58ca5b76195378a41a60107c5e3d79db, type: 3}
-  - {fileID: 4103455123484568237, guid: f99f35aa997954c4dbc67c82cb4fd947, type: 3}
-  - {fileID: 4103455123484568237, guid: ac61e27fcf0996f448aa2ba7f8173d73, type: 3}
-  - {fileID: 4103455123484568237, guid: e6c15f11ed37ffa4ca28ce8745dd39a8, type: 3}
-  - {fileID: 4103455123484568237, guid: 1780f8ec6d7cb994abbcb2c66413a134, type: 3}
-  - {fileID: 4103455123484568237, guid: 916e740651179f44db92db76d3c74776, type: 3}
+  - {fileID: 5821758042861381403, guid: 58ca5b76195378a41a60107c5e3d79db, type: 3}
+  - {fileID: 5821758042861381403, guid: 23799da47ef846d4787f87026f947d30, type: 3}
+  - {fileID: 5821758042861381403, guid: 2e907b2da596bea468362f5b79ce10ba, type: 3}
+  - {fileID: 5821758042861381403, guid: 9ec30fe98e9c6c644a75132c75884153, type: 3}
+  - {fileID: 5821758042861381403, guid: 00446e3d4ed88b1448fa2d77dff70412, type: 3}
+  - {fileID: 5821758042861381403, guid: a8718ba996734994da26e273dea4e53c, type: 3}
   thrusters:
   - {fileID: 4103455123484568237, guid: 95d35c74b8430b445864aab8dc77d370, type: 3}
-  - {fileID: 4103455123484568237, guid: 9f2c48c9942e7a9449837e7591711cd9, type: 3}
-  - {fileID: 4103455123484568237, guid: f7d0d947851133948b668423a74c8722, type: 3}
-  - {fileID: 4103455123484568237, guid: 5358ef1cb3bfb5243a0797e0ac2b3b2a, type: 3}
+  - {fileID: 3584131821861006865, guid: 9f2c48c9942e7a9449837e7591711cd9, type: 3}
+  - {fileID: 3584131821861006865, guid: d68aa3293a7981c4598081a30903171a, type: 3}
+  - {fileID: 3584131821861006865, guid: 9d233e263a658a643806a4fc19b66fe6, type: 3}
 --- !u!4 &167836625
 Transform:
   m_ObjectHideFlags: 0
@@ -918,7 +918,7 @@ GameObject:
   - component: {fileID: 237850316}
   m_Layer: 5
   m_Name: BitsPanel
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1427,7 +1427,7 @@ GameObject:
   - component: {fileID: 371533197}
   m_Layer: 5
   m_Name: FramesPanel
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1777,7 +1777,7 @@ GameObject:
   - component: {fileID: 492509273}
   m_Layer: 5
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1853,7 +1853,7 @@ GameObject:
   - component: {fileID: 546428277}
   m_Layer: 5
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2045,7 +2045,7 @@ GameObject:
   - component: {fileID: 706636668}
   m_Layer: 5
   m_Name: WeaponsPanel
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2198,7 +2198,7 @@ GameObject:
   - component: {fileID: 826470525}
   m_Layer: 5
   m_Name: ControlsPanel
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2466,7 +2466,7 @@ GameObject:
   - component: {fileID: 899006900}
   m_Layer: 5
   m_Name: ThrustersPanel
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3896,7 +3896,7 @@ GameObject:
   - component: {fileID: 1631909398}
   m_Layer: 5
   m_Name: Title
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4611,7 +4611,7 @@ GameObject:
   - component: {fileID: 1892376175}
   m_Layer: 5
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: UIIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

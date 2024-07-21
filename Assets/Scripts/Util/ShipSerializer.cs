@@ -27,7 +27,6 @@ public class ShipSerializer {
             Id = bit.Id,
             Type = bit.Type,
             Children = new(),
-            SlotIds = new(),
             Position = new JsonVector3(bit.transform.localPosition)
         };
 
@@ -36,15 +35,12 @@ public class ShipSerializer {
                 if (slot.Value == bit.Root) {
                     BitData childData = new BitData {RootPlaceholder = true};
                     bitData.Children.Add(childData);
-                    bitData.SlotIds.Add(slot.Key);
                 } else {
                     BitData childData = SaveBit(slot.Value);
                     bitData.Children.Add(childData);
-                    bitData.SlotIds.Add(slot.Key);
                 }
             } else {
                 bitData.Children.Add(null); // Maintain the order of slots
-                bitData.SlotIds.Add(slot.Key);
             }
         }
 

@@ -8,7 +8,7 @@ public class ShipEditorUI : MonoBehaviour {
         Ship ship = Factory.Instance.CreateBaseShip(Vector3.zero);
         Ref.Player.SetShip(ship);
 
-        Ref.Player.Input.InputCancel += Trash;
+        Ref.Player.PlayerInput.InputCancel += Trash;
 
         // ship.transform.Rotate(new Vector3(0,0,45));
     }
