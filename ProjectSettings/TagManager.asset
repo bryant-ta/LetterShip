@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Point
   - UIIgnore
+  - Enemy
+  - Core
+  - Shop
   layers:
   - Default
   - TransparentFX

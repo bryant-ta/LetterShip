@@ -21,6 +21,14 @@ public class Factory : Singleton<Factory> {
         GameObject salvageObj = Instantiate(salvageBase, pos, Quaternion.identity);
         return salvageObj;
     }
+    
+    public GameObject CreateSalvage(int id, BitType type, Vector3 pos) {
+        GameObject salvageObj = Instantiate(salvageBase, pos, Quaternion.identity);
+        Bit bit = CreateBit(id, type, pos);
+        bit.transform.parent = salvageObj.transform;
+        
+        return salvageObj;
+    }
 
     public Ship CreateBaseShip(Vector3 pos) {
         Ship ship = Instantiate(simpleShip, pos, Quaternion.identity).GetComponent<Ship>();

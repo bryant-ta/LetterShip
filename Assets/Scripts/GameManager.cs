@@ -1,17 +1,27 @@
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
+    public int Coins;
+    public int InitialCoins;
     
-
-    void Start() {
-        Setup();
-    }
+    void Start() { Setup(); }
 
     void Setup() {
-        Factory.Instance.CreateFrame(Random.Range(1, 9), new Vector3(-4, -2));
-        Factory.Instance.CreateFrame(Random.Range(1, 9), new Vector3(-2, -2));
-        Factory.Instance.CreateWeapon(Random.Range(0,7), new Vector3(0, -2));
-        Factory.Instance.CreateThruster(Random.Range(0, 4), new Vector3(2, -2));
-        Factory.Instance.CreateThruster(Random.Range(0, 4), new Vector3(4, -2));
+        Ship ship = Factory.Instance.CreateBaseShip(Vector3.zero);
+        Ref.Player.SetShip(ship);
+        Ref.Player.Ship.transform.position = new Vector3(0, -5, 0);
+
+        ModifyCoins(InitialCoins);
+    }
+
+    public bool ModifyCoins(int delta) {
+        int newVal = Coins + delta;
+        if (newVal < 0) {
+            return false;
+        }
+
+        Coins = newVal;
+        UIManager.Instance.UpdateCoinText(Coins);
+        return true;
     }
 }

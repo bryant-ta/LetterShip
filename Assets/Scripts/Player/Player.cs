@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour {
-    [SerializeField] string startShipName;
-
     public PlayerInput PlayerInput { get; private set; }
     public Ship Ship { get; private set; }
     
@@ -27,16 +25,24 @@ public class Player : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.LeftShift)) bitConnRenderer.Render(Ship.Core);
         if (Input.GetKeyUp(KeyCode.LeftShift)) bitConnRenderer.Clear();
+        
+        
     }
 
     public void GrabBit(ClickInputArgs clickInputArgs) {
         if (heldBit != null) return;
         if (clickInputArgs.TargetObj == null) return;
 
-        Bit b = clickInputArgs.TargetObj.GetComponent<Bit>();
-        if (b == null) return;
+        if (!clickInputArgs.TargetObj.TryGetComponent(out Bit targetBit)) return;
+        if (targetBit.transform.parent.CompareTag("Enemy") || targetBit.name == "Frame_Core") return;
 
-        heldBit = b;
+        if (clickInputArgs.TargetObj.CompareTag("Shop")) {
+            if (!Shop.Instance.Buy(targetBit)) {
+                return;
+            }
+        }
+        
+        heldBit = targetBit;
 
         heldBit.Dettach();
 
@@ -44,6 +50,8 @@ public class Player : MonoBehaviour {
         foreach (var bit in heldBits) {
             bit.BodyCol.enabled = false;
         }
+        
+        heldBit.transform.parent.rotation = Quaternion.identity;
 
         PlayerInput.InputPoint += DragBit;
     }

@@ -87,7 +87,6 @@ public class Bit : MonoBehaviour {
         root.Slots[rootSlotID] = this;
         root.SlotCols[rootSlotID].enabled = false;
 
-
         // Change parent
         Transform oldParent = transform.parent;
         for (int i = oldParent.childCount - 1; i >= 0; i--) {
@@ -108,6 +107,8 @@ public class Bit : MonoBehaviour {
 
         Transform oldParent = transform.parent;
         Transform newParent = Factory.Instance.CreateSalvage(transform.position).transform;
+        newParent.transform.rotation = oldParent.rotation;
+        transform.tag = "Untagged";
         transform.parent = newParent;
         foreach (Bit bit in Children()) {
             bit.tag = "Untagged";

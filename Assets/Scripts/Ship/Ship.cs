@@ -57,7 +57,7 @@ public class Ship : MonoBehaviour {
 
     public void UpdateMass() {
         List<Bit> allShipBits = AllBits();
-        rb.mass = (float)allShipBits.Count/3f;
+        rb.mass = (float)allShipBits.Count/4f;
     }
     
     public List<Bit> AllBits() {

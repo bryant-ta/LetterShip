@@ -57,7 +57,27 @@ public class Weapon : Bit {
     void MakeProjectile(int dir) {
         GameObject pObj = Instantiate(projectileObj, transform.position, transform.rotation);
         Projectile p = pObj.GetComponent<Projectile>();
-        p.Init(Atk, Util.IntToDir(dir));
+
+        Vector2 dirV = Vector2.zero;
+        switch (dir) {
+            case 0:
+                dirV = transform.up;
+                break;
+            case 1:
+                dirV = transform.right;
+                break;
+            case 2:
+                dirV = -transform.up;
+                break;
+            case 3:
+                dirV = -transform.right;
+                break;
+            default:
+                Debug.LogError("unhandled dir int");
+                break;
+        }
+        
+        p.Init(Atk, dirV);
     }
 
     public override void Activate() {

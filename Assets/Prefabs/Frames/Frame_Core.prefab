@@ -56,12 +56,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4103455123484568215, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
+      propertyPath: Hp
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103455123484568215, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
       propertyPath: Id
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4103455123484568237, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
       propertyPath: m_Name
       value: Frame_Core
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103455123484568237, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
+      propertyPath: m_TagString
+      value: Core
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48752c212a414fb4a88d55c7da108d06, type: 3}
