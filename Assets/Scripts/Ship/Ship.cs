@@ -47,6 +47,18 @@ public class Ship : MonoBehaviour {
 
         return matchedFrames;
     }
+    
+    public void ActivateAllSecondary() {
+        for (int i = 0; i < transform.childCount; i++) {
+            if (transform.GetChild(i).TryGetComponent(out Bit bit)) {
+                if (bit is Weapon weapon) {
+                    weapon.Activate();
+                } else if (bit is Thruster thruster) {
+                    thruster.Activate();
+                }
+            }
+        }
+    }
 
     public void DeactivateAll() {
         List<Bit> allShipBits = AllBits();

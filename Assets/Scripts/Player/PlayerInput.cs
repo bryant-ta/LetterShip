@@ -17,9 +17,13 @@ public class PlayerInput : MonoBehaviour {
 
     Camera mainCam;
 
+    public bool StopInput;
+
     void Awake() { mainCam = Camera.main; }
 
     void Update() {
+        if (StopInput) return;
+        
         if (Input.GetButtonDown("Cancel")) {
             InputCancel?.Invoke();
         }

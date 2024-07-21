@@ -24,4 +24,9 @@ public class GameManager : Singleton<GameManager> {
         UIManager.Instance.UpdateCoinText(Coins);
         return true;
     }
+
+    public void Lose() {
+        Ref.Player.PlayerInput.StopInput = true;
+        UIManager.Instance.ToggleMainMenuButton(true);
+    }
 }

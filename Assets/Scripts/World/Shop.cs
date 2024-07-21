@@ -39,6 +39,7 @@ public class Shop : Singleton<Shop> {
             productTrs.parent = null;
             productTrs.tag = "Untagged";
             productTrs.GetChild(0).tag = "Untagged";
+            productTrs.GetComponent<Rigidbody2D>().isKinematic = false;
             
             return true;
         } else {
@@ -81,9 +82,11 @@ public class Shop : Singleton<Shop> {
         o.transform.parent = shopPositions[index];
         o.transform.localPosition = Vector3.zero;
 
+        o.GetComponent<Rigidbody2D>().isKinematic = true;
+        
         o.tag = "Shop";
         o.transform.GetChild(0).tag = "Shop";
-        
+
         // Price
         if (!initial) {
             int price = Random.Range(1, 10);

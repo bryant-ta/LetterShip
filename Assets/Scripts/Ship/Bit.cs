@@ -148,6 +148,10 @@ public class Bit : MonoBehaviour {
             
             Deactivate();
             Destroy(transform.parent.gameObject);
+
+            if (Ref.Player.Ship.Core == this) {
+                GameManager.Instance.Lose();
+            }
         }
 
         Color c = sr.color;
