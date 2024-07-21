@@ -110,9 +110,11 @@ public class Bit : MonoBehaviour {
         newParent.transform.rotation = oldParent.rotation;
         transform.tag = "Untagged";
         transform.parent = newParent;
+        DeactivateTyped();
         foreach (Bit bit in Children()) {
             bit.tag = "Untagged";
             bit.transform.parent = newParent;
+            bit.DeactivateTyped();
         }
 
         for (int i = 0; i < Root.Slots.Count; i++) {
@@ -151,6 +153,9 @@ public class Bit : MonoBehaviour {
 
             if (Ref.Player.Ship.Core == this) {
                 GameManager.Instance.Lose();
+            } else if (Id == 0 && Type == BitType.Frame) { // core dead
+                World.Instance.NumCurEnemies--;
+                GameManager.Instance.ModifyCoins(10);
             }
         }
 
@@ -245,6 +250,23 @@ public class Bit : MonoBehaviour {
         }
 
         return allBits;
+    }
+
+    void DeactivateTyped() {
+        switch (Type) {
+            case BitType.Frame:
+                Frame f = (Frame) this;
+                f.Deactivate();
+                break;
+            case BitType.Weapon:
+                Weapon w = (Weapon) this;
+                w.Deactivate();
+                break;
+            case BitType.Thruster:
+                Thruster t = (Thruster) this;
+                t.Deactivate();
+                break;
+        }
     }
     
     #endregion

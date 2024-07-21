@@ -14,14 +14,14 @@ public class Frame : Bit {
     }
 
     public override void Activate() {
-        foreach (Bit bit in Children()) {
+        foreach (Bit bit in DirectChildren()) {
             if (bit is Frame) continue;
             bit.Activate();
         }
     }
 
     public override void Deactivate() {
-        foreach (Bit bit in Children()) {
+        foreach (Bit bit in DirectChildren()) {
             if (bit is Frame) continue;
             bit.Deactivate();
         }

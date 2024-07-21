@@ -5,6 +5,8 @@ public class Thruster : Bit {
     public int Pow;
 
     Rigidbody2D rb;
+    
+    float maxAngularVelocity = 10;
 
     bool isThrusting;
     void FixedUpdate() {
@@ -14,6 +16,12 @@ public class Thruster : Bit {
             }
             
             ApplyThrust(transform.localPosition, Pow);
+
+            if (rb.angularVelocity > maxAngularVelocity) {
+                rb.angularVelocity = maxAngularVelocity;
+            } else if (rb.angularVelocity < -maxAngularVelocity) {
+                rb.angularVelocity = -maxAngularVelocity;
+            }
         }
     }
 

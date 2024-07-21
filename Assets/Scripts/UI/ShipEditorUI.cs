@@ -9,8 +9,6 @@ public class ShipEditorUI : MonoBehaviour {
         Ref.Player.SetShip(ship);
 
         Ref.Player.PlayerInput.InputCancel += Trash;
-
-        // ship.transform.Rotate(new Vector3(0,0,45));
     }
 
     public void SpawnFrame(int id) {
@@ -70,5 +68,13 @@ public class ShipEditorUI : MonoBehaviour {
 
     public void LoadShip() { Factory.Instance.LoadShip(shipNameField.text); }
 
-    public void ResetShip() { Ref.Player.Ship.transform.position = Vector3.zero; }
+    public void ResetShip() {
+        Ref.Player.Ship.transform.position = Vector3.zero; 
+        Ref.Player.Ship.transform.rotation = Quaternion.identity; 
+    }
+
+    public void ClearShip() {
+        Ship ship = Factory.Instance.CreateBaseShip(Vector3.zero);
+        Ref.Player.SetShip(ship);
+    }
 }

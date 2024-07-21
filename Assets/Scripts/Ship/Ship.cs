@@ -7,8 +7,17 @@ public class Ship : MonoBehaviour {
 
     Rigidbody2D rb;
 
-    void Awake() {
-        rb = GetComponent<Rigidbody2D>();
+    void Awake() { rb = GetComponent<Rigidbody2D>(); }
+
+    void Update() {
+        if (CompareTag("Enemy")) {
+            Vector3 pos = transform.position;
+            if (transform.position.x > World.Instance.maxX || transform.position.x < World.Instance.minX ||
+                transform.position.y > World.Instance.maxY || transform.position.y < World.Instance.minY) {
+                World.Instance.NumCurEnemies--;
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void ActivateLetter(char letter) {
@@ -47,7 +56,7 @@ public class Ship : MonoBehaviour {
 
         return matchedFrames;
     }
-    
+
     public void ActivateAllSecondary() {
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild(i).TryGetComponent(out Bit bit)) {
@@ -69,9 +78,9 @@ public class Ship : MonoBehaviour {
 
     public void UpdateMass() {
         List<Bit> allShipBits = AllBits();
-        rb.mass = (float)allShipBits.Count/4f;
+        rb.mass = (float) allShipBits.Count / 4f;
     }
-    
+
     public List<Bit> AllBits() {
         List<Bit> allBits = new();
         if (Core == null) return allBits;

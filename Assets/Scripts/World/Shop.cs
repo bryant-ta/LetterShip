@@ -11,6 +11,9 @@ public class Shop : Singleton<Shop> {
     [SerializeField] List<Transform> shopPositions;
     [SerializeField] List<TextMeshProUGUI> priceTexts;
     List<int> prices = new();
+
+    [SerializeField] TextMeshProUGUI goExploreText;
+    [SerializeField] TextMeshProUGUI nextText;
     
     public CountdownTimer refreshTimer;
     
@@ -20,6 +23,19 @@ public class Shop : Singleton<Shop> {
         for (int i = 0; i < shopPositions.Count; i++) {
             prices.Add(0);
         }
+
+        refreshTimer.EndEvent += HideExploreText;
+    }
+
+    void HideExploreText() {
+        goExploreText.gameObject.SetActive(false);
+        nextText.gameObject.SetActive(true);
+        refreshTimer.EndEvent -= HideExploreText;
+        refreshTimer.EndEvent += HideNextText;
+    }
+    void HideNextText() {
+        nextText.gameObject.SetActive(false);
+        refreshTimer.EndEvent -= HideNextText;
     }
 
     void Start() {
@@ -39,7 +55,6 @@ public class Shop : Singleton<Shop> {
             productTrs.parent = null;
             productTrs.tag = "Untagged";
             productTrs.GetChild(0).tag = "Untagged";
-            productTrs.GetComponent<Rigidbody2D>().isKinematic = false;
             
             return true;
         } else {
@@ -81,8 +96,6 @@ public class Shop : Singleton<Shop> {
         }
         o.transform.parent = shopPositions[index];
         o.transform.localPosition = Vector3.zero;
-
-        o.GetComponent<Rigidbody2D>().isKinematic = true;
         
         o.tag = "Shop";
         o.transform.GetChild(0).tag = "Shop";

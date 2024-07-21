@@ -113,7 +113,7 @@ public class Player : MonoBehaviour {
     public void TrashBit() {
         if (heldBit == null) return;
 
-        Destroy(heldBit.gameObject);
+        Destroy(heldBit.transform.parent.gameObject);
 
         ReleaseTasks();
     }

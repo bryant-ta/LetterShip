@@ -10,8 +10,7 @@ public class ShipSerializer {
 
         string json = JsonConvert.SerializeObject(coreBitData, Formatting.Indented);
 
-        string saveFilePath = Path.Combine(Application.persistentDataPath, input);
-        saveFilePath = Path.ChangeExtension(saveFilePath, ".json");
+        string saveFilePath = Path.Combine(Application.persistentDataPath, input + ".json");
 
         string directoryPath = Path.GetDirectoryName(saveFilePath);
         if (!Directory.Exists(directoryPath)) {
@@ -56,9 +55,36 @@ public class ShipSerializer {
             BitData bitData = JsonConvert.DeserializeObject<BitData>(json);
             return bitData;
         } else {
-            Debug.LogError("No saved ship configuration found.");
-            return null;
+            TextAsset textAsset = Resources.Load<TextAsset>(input);
+            if (textAsset != null) {
+                BitData bitData = JsonConvert.DeserializeObject<BitData>(textAsset.text);
+                return bitData;
+            } else {
+                Debug.LogError("No saved ship configuration found in Resources or persistent data path.");
+                return null;
+            }
         }
+    }
+
+    public List<string> GetFileNamesWithPrefix(string prefix) {
+        List<string> fileNames = new List<string>();
+
+        TextAsset[] textAssets = Resources.LoadAll<TextAsset>("");
+        foreach (TextAsset textAsset in textAssets) {
+            if (textAsset.name.StartsWith(prefix)) {
+                fileNames.Add(textAsset.name);
+            }
+        }
+
+        string[] files = Directory.GetFiles(Application.persistentDataPath, prefix + "*.json");
+        foreach (string filePath in files) {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (!fileNames.Contains(fileName)) {
+                fileNames.Add(fileName);
+            }
+        }
+
+        return fileNames;
     }
 
     string Clean(string text) {
@@ -68,4 +94,3 @@ public class ShipSerializer {
         return text;
     }
 }
-

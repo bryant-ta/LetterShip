@@ -21,12 +21,12 @@ public class Factory : Singleton<Factory> {
         GameObject salvageObj = Instantiate(salvageBase, pos, Quaternion.identity);
         return salvageObj;
     }
-    
+
     public GameObject CreateSalvage(int id, BitType type, Vector3 pos) {
         GameObject salvageObj = Instantiate(salvageBase, pos, Quaternion.identity);
         Bit bit = CreateBit(id, type, pos);
         bit.transform.parent = salvageObj.transform;
-        
+
         return salvageObj;
     }
 
@@ -38,14 +38,12 @@ public class Factory : Singleton<Factory> {
     }
 
     public Ship CreateShip(string shipName, Vector3 pos) {
-        Ship ship = Instantiate(shipBase, pos, Quaternion.identity).GetComponent<Ship>();
-
         BitData bitData = shipSerializer.LoadBit(shipName);
-        if (bitData == null) return null;
-
+        if (bitData == null) return CreateBaseShip(pos);
+        
+        Ship ship = Instantiate(shipBase, pos, Quaternion.identity).GetComponent<Ship>();
         ship.Core = CreateBitFromBitData(bitData, null, ship.transform);
         
-
         return ship;
     }
 
@@ -96,7 +94,7 @@ public class Factory : Singleton<Factory> {
             int randomIndex = Random.Range(0, 26);
             c = (char) ('A' + randomIndex);
         }
-        
+
         frame.Init(id, BitType.Frame, c);
         return frame;
     }
@@ -122,6 +120,8 @@ public class Factory : Singleton<Factory> {
         Ship ship = CreateShip(input, Vector3.zero);
         Ref.Player.SetShip(ship);
     }
+
+    public List<string> LoadEnemyNames() { return shipSerializer.GetFileNamesWithPrefix("e_"); }
 
     #endregion
 }

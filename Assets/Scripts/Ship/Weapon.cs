@@ -9,14 +9,17 @@ public class Weapon : Bit {
     float atkInterval;
     float nextAtkTime;
 
-    void Start() {
-        atkInterval = 1f / AtkSpd;
-    }
+    void Start() { atkInterval = 1f / AtkSpd; }
 
     void Update() {
         if (isAttacking && Time.time >= nextAtkTime) {
             Shoot();
-            nextAtkTime = Time.time + atkInterval;
+
+            if (CompareTag("Player")) {
+                nextAtkTime = Time.time + atkInterval/2;
+            } else {
+                nextAtkTime = Time.time + atkInterval;
+            }
         }
     }
 
@@ -76,15 +79,12 @@ public class Weapon : Bit {
                 Debug.LogError("unhandled dir int");
                 break;
         }
-        
-        p.Init(Atk, dirV);
+
+        bool isPlayerMade = gameObject.CompareTag("Player");
+        p.Init(Atk, dirV, isPlayerMade);
     }
 
-    public override void Activate() {
-        isAttacking = true;
-    }
+    public override void Activate() { isAttacking = true; }
 
-    public override void Deactivate() {
-        isAttacking = false;
-    }
+    public override void Deactivate() { isAttacking = false; }
 }

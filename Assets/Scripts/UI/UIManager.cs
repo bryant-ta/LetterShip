@@ -8,6 +8,7 @@ public class UIManager : Singleton<UIManager> {
     [SerializeField] Image shopRefreshTimer;
 
     [SerializeField] Button mainMenuButton;
+    [SerializeField] TextMeshProUGUI diedText;
 
     void Start() {
         Shop.Instance.refreshTimer.TickEvent += UpdateShopRefreshTimer;
@@ -25,5 +26,9 @@ public class UIManager : Singleton<UIManager> {
     void ToggleMainMenuButtonHelper() { ToggleMainMenuButton(!mainMenuButton.gameObject.activeSelf);}
     public void ToggleMainMenuButton(bool enable) {
         mainMenuButton.gameObject.SetActive(enable);
+    }
+
+    public void ShowDiedText() {
+        diedText.gameObject.SetActive(true);
     }
 }

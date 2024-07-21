@@ -5,8 +5,11 @@ public class Projectile : MonoBehaviour {
     public float lifetime = 5f;
     public int Dmg;
 
-    public void Init(int dmg, Vector2 dir) {
+    bool isPlayerMade;
+
+    public void Init(int dmg, Vector2 dir, bool isPlayerMade) {
         Dmg = dmg;
+        this.isPlayerMade = isPlayerMade;
 
         // Set the rotation to face the direction
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -22,7 +25,10 @@ public class Projectile : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if (col.CompareTag("Player")) return;
+        if (isPlayerMade && col.CompareTag("Player") || !isPlayerMade && col.CompareTag("Enemy")) {
+            return;
+        }
+        
         if (col.TryGetComponent(out Bit b) && b.BodyCol == col) {
             b.DoDamage(Dmg);
             Destroy(gameObject);

@@ -7,7 +7,7 @@ public class GameManager : Singleton<GameManager> {
     void Start() { Setup(); }
 
     void Setup() {
-        Ship ship = Factory.Instance.CreateBaseShip(Vector3.zero);
+        Ship ship = Factory.Instance.CreateShip("base_player", Vector3.zero);
         Ref.Player.SetShip(ship);
         Ref.Player.Ship.transform.position = new Vector3(0, -5, 0);
 
@@ -28,5 +28,6 @@ public class GameManager : Singleton<GameManager> {
     public void Lose() {
         Ref.Player.PlayerInput.StopInput = true;
         UIManager.Instance.ToggleMainMenuButton(true);
+        UIManager.Instance.ShowDiedText();
     }
 }
