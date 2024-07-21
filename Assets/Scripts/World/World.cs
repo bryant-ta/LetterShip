@@ -55,7 +55,7 @@ public class World : Singleton<World> {
         while (true) {
             yield return new WaitForSeconds(coinSpawnRate);
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (NumCurCoin < maxCoins) {
                     Vector2 randomPosition;
                     do {

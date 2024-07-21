@@ -108,6 +108,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 467087351706731814, guid: 46191435582a66449a1f1efb310731d7, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 467087351706731815, guid: 46191435582a66449a1f1efb310731d7, type: 3}
       propertyPath: m_Name
       value: SimpleShip
