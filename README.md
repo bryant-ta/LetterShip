@@ -27,6 +27,10 @@ Esc           | show exit button
 YOU DIE if your core is destroyed.
 
 ---
+![](https://github.com/bryant-ta/LetterShip/blob/main/Demo/a.gif)
+![](https://github.com/bryant-ta/LetterShip/blob/main/Demo/b.gif)
+![](https://github.com/bryant-ta/LetterShip/blob/main/Demo/d.gif)
+
 ### Notes
 
 - Weapons/Thrusters can only be connected where arrows are on frames.
